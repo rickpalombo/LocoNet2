@@ -39,6 +39,10 @@
 #include <LocoNetStreamSTM32.h>
 #include <stm32yyxx_ll_usart.h>
 
+#ifdef STM32F4xx
+#include <stm32yyxx_ll_gpio.h>
+#endif
+
 LocoNetStreamSTM32::LocoNetStreamSTM32(HardwareSerial * serialPort, uint8_t rxPin, uint8_t txPin, LocoNetBus *bus, bool rxPinInvert, bool txPinInvert) : LocoNetStream(bus)
 {
 	_serialPort = serialPort;
@@ -57,9 +61,11 @@ void LocoNetStreamSTM32::start(void)
 	
 	USART_TypeDef * USARTx = _serialPort->getHandle()->Instance;
 	
+#ifndef STM32F4xx
 	LL_USART_SetRXPinLevel(USARTx, (_rxPinInvert) ? LL_USART_RXPIN_LEVEL_INVERTED : LL_USART_RXPIN_LEVEL_STANDARD);
 
 	LL_USART_SetTXPinLevel(USARTx, (_txPinInvert) ? LL_USART_TXPIN_LEVEL_INVERTED : LL_USART_TXPIN_LEVEL_STANDARD);
+#endif
 		
 	_serialPort->begin(LOCONET_BAUD);
 	
@@ -108,11 +114,21 @@ void LocoNetStreamSTM32::sendBreak(void)
 	// Generate a BREAK by inverting the UART Tx output to cause the LocoNet to be pulled-down, delay(), then revert the UART Tx output to normal polarity, to release the LocoNet
 	USART_TypeDef * USARTx = _serialPort->getHandle()->Instance;
 	
+#ifdef STM32F4xx
+    LL_USART_Disable(USARTx);
+    LL_GPIO_SetPinMode(digitalPinToPort(_txPin), digitalPinToBitMask(_txPin), LL_GPIO_MODE_OUTPUT);
+    digitalWrite(_txPin, LOW);
+#else
 	LL_USART_SetTXPinLevel(USARTx, (_txPinInvert) ? LL_USART_TXPIN_LEVEL_STANDARD : LL_USART_TXPIN_LEVEL_INVERTED);
+#endif
 	
 	delayMicroseconds(CollisionTimeoutIncrement);
 	
+#ifdef STM32F4xx
+    LL_USART_Enable(USARTx);
+#else
 	LL_USART_SetTXPinLevel(USARTx, (_txPinInvert) ? LL_USART_TXPIN_LEVEL_INVERTED : LL_USART_TXPIN_LEVEL_STANDARD);
+#endif
 };
 
 #endif
