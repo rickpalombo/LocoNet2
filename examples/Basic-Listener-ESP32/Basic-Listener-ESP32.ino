@@ -8,11 +8,14 @@ LocoNetBus bus;
 
 #define LOCONET_PIN_RX 33
 #define LOCONET_PIN_TX 32
-#define LOCONET_UART_SIGNAL_INVERT  true
+
+// Set these according to your LocoNet hardware interface signal requirements
+#define LOCONET_UART_RX_SIGNAL_INVERT  true
+#define LOCONET_UART_TX_SIGNAL_INVERT  true
 
 #include <LocoNetStream.h>
 LocoNetDispatcher parser(&bus);
-LocoNetStreamESP32 lnStream(1, LOCONET_PIN_RX, LOCONET_PIN_TX, LOCONET_UART_SIGNAL_INVERT, &bus);
+LocoNetStreamESP32 lnStream(1, LOCONET_PIN_RX, LOCONET_PIN_TX, LOCONET_UART_RX_SIGNAL_INVERT, LOCONET_UART_TX_SIGNAL_INVERT, &bus);
 
 void setup() {
 #if defined(ARDUINO_M5Stick_C)

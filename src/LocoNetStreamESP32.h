@@ -38,7 +38,9 @@
 #ifdef ARDUINO_ARCH_ESP32
 
 #include <LocoNetStream.h>
+#include "driver/uart.h"
 #include "soc/uart_struct.h"
+#include "hal/uart_types.h"
 #include "esp32-hal.h"
 
 // The following line is fron the ESP32 SDK file: Arduino15/packages/esp32/hardware/esp32/2.0.4/tools/sdk/esp32/include/hal/esp32/include/hal/uart_ll.h
@@ -50,19 +52,32 @@
 
 class LocoNetStreamESP32: public LocoNetStream {
 	public:
-		LocoNetStreamESP32(int esp32UartNumber, int8_t rxPin, int8_t txPin, bool invert, LocoNetBus *bus) : LocoNetStream(bus)
+		LocoNetStreamESP32(int esp32UartNumber, int8_t rxPin, int8_t txPin, bool rxInvert, bool txInvert, LocoNetBus *bus) : LocoNetStream(bus)
 		{
-			_uart_nr = esp32UartNumber;
+			_uart_nr = (uart_port_t) esp32UartNumber;
 			_rxPin = rxPin;
+			_rxInvert = rxInvert;
 			_txPin = txPin;
-			_invert = invert;
+			_txInvert = txInvert;
 			_serialPort = new HardwareSerial(_uart_nr);
 		};
 	
 		void start(void)
 		{
-			_serialPort->begin(LOCONET_BAUD, SERIAL_8N1, _rxPin, _txPin, _invert);
+			_serialPort->begin(LOCONET_BAUD, SERIAL_8N1, _rxPin, _txPin, false);
 			
+			if(_rxInvert || _txInvert){
+				uint32_t newInvertState = UART_SIGNAL_INV_DISABLE;
+				
+				if(_rxInvert)
+					newInvertState |= UART_SIGNAL_RXD_INV;
+					
+				if(_txInvert)
+					newInvertState |= UART_SIGNAL_TXD_INV;
+
+				uart_set_line_inverse(_uart_nr, newInvertState);
+			};
+
 			begin(_serialPort);
 		}
 
@@ -98,12 +113,13 @@ class LocoNetStreamESP32: public LocoNetStream {
 		};
 		
 	private:
-		uint32_t			_uart_nr;
+		uart_port_t			_uart_nr;
 		HardwareSerial * 	_serialPort;
 		uint32_t 			_tempRxFifoThreshold;
 		int8_t				_rxPin;
+		bool				_rxInvert;
 		int8_t				_txPin;
-		bool				_invert;
+		bool				_txInvert;
 
 		uint32_t updateRxFifoFullThreshold(uint32_t newThreshold)
 		{
