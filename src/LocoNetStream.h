@@ -48,7 +48,7 @@ class LocoNetStream: public LocoNetPhy {
 		void begin(Stream * serialPort);
 		void end();
 		void process();
-
+		void start();
 
 	protected:
 		LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay);
