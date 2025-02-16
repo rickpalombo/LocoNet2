@@ -63,30 +63,10 @@ void LocoNetOverTCPStream::begin(Stream * serialPort) {
             _lnOverTcpVersion = line.substring(8);
         }
     }
-
-    /*
-    SendPacket.data[0] = OPC_RQ_SL_DATA;
-    SendPacket.data[1] = 0;
-    SendPacket.data[2] = 0;
-    writeChecksum(SendPacket);
-
-    tcpMessage = "SEND " + _converter->convertFromLnMessage(SendPacket.data, 4);
-    Serial.println(tcpMessage);
-
-    _client.println(tcpMessage);
-    _client.flush();
-
-    line = emptyString;
-    for (int i = 0; i < 3; i++) {
-        while ((line = _client.readStringUntil('\n')).length() == 0);
-        Serial.println(line);
-        line = emptyString;
-    }
-    */
 }
 
 void LocoNetOverTCPStream::end() {
-    // End WiFi Client
+    WiFi.disconnect();
 }
 
 void LocoNetOverTCPStream::process() {
