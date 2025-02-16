@@ -66,6 +66,7 @@ void LocoNetOverTCPStream::begin(Stream * serialPort) {
 }
 
 void LocoNetOverTCPStream::end() {
+    _client.stop();
     WiFi.disconnect();
 }
 
