@@ -55,3 +55,7 @@ bool LocoNetOverTCPStream::isBusy() {
 bool LocoNetOverTCPStream::isConnected() const {
     return _client != nullptr && _client->connected();
 }
+
+void LocoNetOverTCPStream::sendBreak() {}
+void LocoNetOverTCPStream::beforeSend() {}
+void LocoNetOverTCPStream::afterSend() {}

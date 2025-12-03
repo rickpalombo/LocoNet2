@@ -6,10 +6,6 @@
 
 class LocoNetOverTCPStream : public LocoNetStream {
 public:
-	LocoNetOverTCPStream() : LocoNetStream(nullptr) {
-		_client = nullptr;
-	}
-
     LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client) : LocoNetStream(bus) {
         _client = client;
     };
@@ -22,6 +18,9 @@ protected:
 	LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) override;
 
 	bool isBusy() override;
+	void sendBreak() override;
+	void beforeSend() override;
+	void afterSend() override;
 private:
     WiFiClient* _client;
 };
