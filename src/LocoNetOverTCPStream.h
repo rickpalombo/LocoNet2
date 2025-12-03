@@ -1,7 +1,6 @@
 #pragma once
 
 #include <LocoNetStream.h>
-#include <WiFi.h>
 #include <WiFiClient.h>
 
 class LocoNetOverTCPStream : public LocoNetStream {
@@ -17,10 +16,10 @@ public:
 protected:
 	LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) override;
 
-	bool isBusy() override;
-	void sendBreak() override;
-	void beforeSend() override;
-	void afterSend() override;
+	bool isBusy(void) override;
+	void sendBreak(void) override;
+	void beforeSend(void) override;
+	void afterSend(void) override;
 private:
     WiFiClient* _client;
 };

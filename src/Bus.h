@@ -23,8 +23,6 @@
 template < class Msg, class Ret >
 class Consumer {
 public:
-    virtual ~Consumer() = default;
-
     virtual Ret onMessage(const Msg& msg) = 0;
 };
 

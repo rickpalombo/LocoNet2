@@ -1,7 +1,4 @@
-
 #include <LocoNetOverTCPStream.h>
-
-const char digitMap[] = "0123456789abcdef";
 
 void LocoNetOverTCPStream::begin(Stream *serialPort) {}
 
