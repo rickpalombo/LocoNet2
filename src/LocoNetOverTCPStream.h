@@ -22,9 +22,6 @@ protected:
 	LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) override;
 
 	bool isBusy() override;
-	void sendBreak() override;
-	void beforeSend() override;
-	void afterSend() override;
 private:
     WiFiClient* _client;
 };
