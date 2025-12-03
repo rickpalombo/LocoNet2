@@ -6,41 +6,20 @@
 
 class LocoNetOverTCPStream : public LocoNetStream {
     public:
-        LocoNetOverTCPStream(LocoNetBus *bus,
-        char * ssid,
-        char * password,
-        char * ipAddress,
-        uint16_t port) : LocoNetStream(bus) {
-            _ssid = ssid;
-            _password = password;
-            _ipAddress = ipAddress;
-            _port = port;
-            _client = WiFiClient();
+        LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client) : LocoNetStream(bus) {
+            _client = client;
         };
 		void begin(Stream * serialPort);
 		void end();
 		void process();
-
         void start();
-
-        String getVersion();
     protected:
-		LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay);
+		LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) override;
 
-		virtual bool isBusy(void);
-		virtual void sendBreak(void);
-		virtual void beforeSend(void);
-		virtual void afterSend(void);
+		bool isBusy() override;
+		void sendBreak() override;
+		void beforeSend() override;
+		void afterSend() override;
     private:
-        WiFiClient _client;
-        char * _ssid;
-        char * _password;
-        char * _ipAddress;
-        uint16_t _port;
-        bool _busy;
-        String _lnOverTcpVersion;
-        int _keepAlive = 1000;
-        int _keepIdle = 5;
-
-        String toTcpMessage(uint8_t *packetData, uint8_t packetLen);
+        WiFiClient* _client;
 };
