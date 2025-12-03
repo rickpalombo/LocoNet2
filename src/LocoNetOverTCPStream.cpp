@@ -49,7 +49,11 @@ LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_
 }
 
 bool LocoNetOverTCPStream::isBusy() {
-    return !_client->connected();
+    return !isConnected();
+}
+
+bool LocoNetOverTCPStream::isConnected() const {
+    return _client->connected();
 }
 
 void LocoNetOverTCPStream::sendBreak() {}

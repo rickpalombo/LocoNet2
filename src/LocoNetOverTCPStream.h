@@ -17,6 +17,7 @@ public:
 	void end();
 	void process();
     void start();
+	bool isConnected() const;
 protected:
 	LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) override;
 
