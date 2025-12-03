@@ -147,3 +147,11 @@ bool LocoNetStream::hasCDBackoffTimerExpired(uint8_t PrioDelay)
 void LocoNetStream::start() {
 	begin(_serialPort);
 }
+
+bool LocoNetStream::isBusy() {
+	return false;
+}
+
+void LocoNetStream::sendBreak() {}
+void LocoNetStream::beforeSend() {}
+void LocoNetStream::afterSend() {}
