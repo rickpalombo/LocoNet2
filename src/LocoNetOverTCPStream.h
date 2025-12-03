@@ -6,6 +6,10 @@
 
 class LocoNetOverTCPStream : public LocoNetStream {
 public:
+	LocoNetOverTCPStream() : LocoNetStream(nullptr) {
+		_client = nullptr;
+	}
+
     LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client) : LocoNetStream(bus) {
         _client = client;
     };
