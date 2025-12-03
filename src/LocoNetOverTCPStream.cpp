@@ -57,3 +57,7 @@ LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_
 bool LocoNetOverTCPStream::isBusy() {
     return false;
 }
+
+void LocoNetOverTCPStream::sendBreak() {}
+void LocoNetOverTCPStream::beforeSend() {}
+void LocoNetOverTCPStream::afterSend() {}
