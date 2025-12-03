@@ -28,14 +28,8 @@ void LocoNetOverTCPStream::process() {
 }
 
 LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) {
-    DEBUG("sendLocoNetPacketTry: begin state: %s", getStatusStr(LN_IDLE));
-
-    // Do a process() just in case another byte has arrived after we last checked
-    process();
-
     if( !isBusy() )
     {
-        uint32_t tempRxThreshold;
         beforeSend();
 
         DEBUG("sendLocoNetPacketTry: Start to send data");
@@ -55,7 +49,7 @@ LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_
 }
 
 bool LocoNetOverTCPStream::isBusy() {
-    return false;
+    return !_client->connected();
 }
 
 void LocoNetOverTCPStream::sendBreak() {}
