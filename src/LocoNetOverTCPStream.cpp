@@ -30,30 +30,10 @@ void LocoNetOverTCPStream::process() {
     if(_client->available())
     {
         DEBUG("LocoNetOverTCPStream: process: Process LocoNet Bytes");
-        if (_overTcpProtocol) {
-            if (_client->available()) {
-                const char* command = _client->readStringUntil('\n').c_str();
-                const std::vector<std::string> tokens = tokenizeBySpace(command);
-                std::vector<int> byteArray;
-                for (int i = 1; i < tokens.size(); i++) {
-                    int value = std::stoi(tokens[i], nullptr, 16);
-                    byteArray.push_back(value);
-                }
-
-                for (auto const byte : byteArray) {
-                    consume(byte);
-                }
-
-                const char* sentOk = "SENT OK";
-                _client->println(sentOk);
-            }
-        } else {
-            while(_client->available())
-            {
-                uint8_t inByte = _client->read();
-                DEBUG("LocoNetOverTCPStream: process: Byte: %02x", inByte);
-                consume(inByte);
-            }
+        while(_client->available()) {
+            uint8_t inByte = _client->read();
+            DEBUG("LocoNetOverTCPStream: process: Byte: %02x", inByte);
+            consume(inByte);
         }
     }
 }
@@ -66,7 +46,9 @@ LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_
         DEBUG("sendLocoNetPacketTry: Start to send data");
         while(packetLen--)
         {
-            _client->write(packetData, 1);
+            if (_isCommandStation) {
+                _server->write(packetData, 1);
+            }
             packetData++;
         }
         txStats.txPackets++;

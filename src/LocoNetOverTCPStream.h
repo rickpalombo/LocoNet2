@@ -1,13 +1,14 @@
 #pragma once
 
 #include <LocoNetStream.h>
-#include <WiFiClient.h>
+#include <WiFi.h>
 
 class LocoNetOverTCPStream : public LocoNetStream {
 public:
-    LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client, bool overTcpProtocol) : LocoNetStream(bus) {
-        _client = client;
-    	_overTcpProtocol = overTcpProtocol;
+    LocoNetOverTCPStream(LocoNetBus *bus, WiFiServer* server, WiFiClient* client, const bool isCommandStation) : LocoNetStream(bus) {
+    	_server = server;
+    	_client = client;
+    	_isCommandStation = isCommandStation;
     };
 	void begin(Stream * serialPort);
 	void end();
@@ -23,5 +24,6 @@ protected:
 	void afterSend(void) override;
 private:
     WiFiClient* _client;
-	bool _overTcpProtocol;
+	WiFiServer* _server;
+	bool _isCommandStation;
 };
