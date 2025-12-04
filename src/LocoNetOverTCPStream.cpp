@@ -9,6 +9,7 @@ void LocoNetOverTCPStream::start() {
 
 void LocoNetOverTCPStream::end() {
     _client->stop();
+    bus->removeConsumer(this);
 }
 
 void LocoNetOverTCPStream::process() {
