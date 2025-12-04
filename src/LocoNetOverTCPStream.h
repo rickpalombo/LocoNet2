@@ -5,10 +5,8 @@
 
 class LocoNetOverTCPStream : public LocoNetStream {
 public:
-    LocoNetOverTCPStream(LocoNetBus *bus, WiFiServer* server, WiFiClient* client, const bool isCommandStation) : LocoNetStream(bus) {
-    	_server = server;
+    LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client) : LocoNetStream(bus) {
     	_client = client;
-    	_isCommandStation = isCommandStation;
     };
 	void begin(Stream * serialPort);
 	void end();
@@ -24,6 +22,4 @@ protected:
 	void afterSend(void) override;
 private:
     WiFiClient* _client;
-	WiFiServer* _server;
-	bool _isCommandStation;
 };
