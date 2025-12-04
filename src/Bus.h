@@ -11,7 +11,7 @@
 
 #include "ln_opc.h"
 
-#define BUS_DEBUG_
+#define BUS_DEBUG
 
 #ifdef BUS_DEBUG
 #include <Arduino.h>
@@ -33,10 +33,11 @@ public:
 
     Ret broadcast(const Msg &msg, MsgConsumer* sender = nullptr) {
         
-        BUS_DEBUGF("message %02x %02x...", msg.data[0], msg.data[1]);
+        BUS_DEBUGF("Bus: message %02x %02x...", msg.data[0], msg.data[1]);
 
         Ret ret = okVal;
         for(const auto & c: consumers) {
+        BUS_DEBUGF("Bus: sender %p, consumer %p", sender, c);
             if(c!=sender) {
                 Ret v = c->onMessage(msg);
                 if(v!=okVal) ret = v;
@@ -46,6 +47,8 @@ public:
     }
 
     void addConsumer(MsgConsumer * c) {
+        BUS_DEBUGF("Bus: adding consumer %p", c);
+
         consumers.push_back(c);
     }
 

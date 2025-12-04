@@ -14,11 +14,11 @@ void LocoNetOverTCPStream::end() {
 void LocoNetOverTCPStream::process() {
     if(_client->available())
     {
-        DEBUG("process: Process LocoNet Bytes");
+        DEBUG("LocoNetOverTCPStream: process: Process LocoNet Bytes");
         while(_client->available())
         {
             uint8_t inByte = _client->read();
-            DEBUG("process: Byte: %02x", inByte);
+            DEBUG("LocoNetOverTCPStream: process: Byte: %02x", inByte);
             consume(inByte);
         }
     }
