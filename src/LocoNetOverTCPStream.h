@@ -5,8 +5,9 @@
 
 class LocoNetOverTCPStream : public LocoNetStream {
 public:
-    LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client) : LocoNetStream(bus) {
+    LocoNetOverTCPStream(LocoNetBus *bus, WiFiClient* client, bool overTcpProtocol) : LocoNetStream(bus) {
         _client = client;
+    	_overTcpProtocol = overTcpProtocol;
     };
 	void begin(Stream * serialPort);
 	void end();
@@ -22,4 +23,5 @@ protected:
 	void afterSend(void) override;
 private:
     WiFiClient* _client;
+	bool _overTcpProtocol;
 };
