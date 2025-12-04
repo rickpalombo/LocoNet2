@@ -45,7 +45,8 @@ LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_
 
         DEBUG("sendLocoNetPacketTry: Start to send data");
         if (_isCommandStation) {
-            _server->write(packetData, packetLen);
+            _client->write(packetData, packetLen);
+            _client->flush();
         }
         txStats.txPackets++;
 
