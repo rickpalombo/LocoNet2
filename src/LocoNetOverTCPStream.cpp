@@ -4,26 +4,18 @@
 #include <sstream>
 #include <cstdint>
 
-std::vector<std::string> tokenizeBySpace(const std::string& command) {
-    std::vector<std::string> tokens;
-    std::istringstream iss(command);
-    std::string token;
-    while (iss >> token) {
-        tokens.push_back(token);
-    }
-    return tokens;
-}
-
 void LocoNetOverTCPStream::begin(Stream *serialPort) {}
 
 
 void LocoNetOverTCPStream::start() {
     begin(nullptr);
+    _started = true;
 }
 
 void LocoNetOverTCPStream::end() {
     _client->stop();
     bus->removeConsumer(this);
+    _started = false;
 }
 
 void LocoNetOverTCPStream::process() {
@@ -57,11 +49,7 @@ LN_STATUS LocoNetOverTCPStream::sendLocoNetPacketTry(uint8_t *packetData, uint8_
 }
 
 bool LocoNetOverTCPStream::isBusy() {
-    return !isConnected();
-}
-
-bool LocoNetOverTCPStream::isConnected() const {
-    return _client != nullptr && _client->connected();
+    return false;
 }
 
 void LocoNetOverTCPStream::sendBreak() {}

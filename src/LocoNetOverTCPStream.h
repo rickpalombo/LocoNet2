@@ -12,7 +12,7 @@ public:
 	void end();
 	void process();
     void start();
-	bool isConnected() const;
+	bool isStarted(void) { return _started; };
 protected:
 	LN_STATUS sendLocoNetPacketTry(uint8_t *packetData, uint8_t packetLen, unsigned char ucPrioDelay) override;
 
@@ -22,4 +22,5 @@ protected:
 	void afterSend(void) override;
 private:
     WiFiClient* _client;
+	bool _started = false;
 };
