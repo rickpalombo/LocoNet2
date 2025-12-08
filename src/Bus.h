@@ -37,7 +37,6 @@ public:
 
         Ret ret = okVal;
         for(const auto & c: consumers) {
-        BUS_DEBUGF("Bus: sender %p, consumer %p", sender, c);
             if(c!=sender) {
                 Ret v = c->onMessage(msg);
                 if(v!=okVal) ret = v;
