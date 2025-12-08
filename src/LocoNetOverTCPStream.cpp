@@ -24,7 +24,6 @@ void LocoNetOverTCPStream::process() {
         DEBUG("LocoNetOverTCPStream: process: Process LocoNet Bytes");
         while(_client->available()) {
             uint8_t inByte = _client->read();
-            DEBUG("LocoNetOverTCPStream: process: Byte: %02x", inByte);
             consume(inByte);
         }
     }
